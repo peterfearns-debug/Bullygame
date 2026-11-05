@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="game">
+    <h1>Hello, Game!</h1>
+    <p>Drag the card into either box.</p>
+
+    <div id="card-home">
+      <div class="card" id="card" draggable="true">
+        👋 Hello! Drag me!
+      </div>
+    </div>
+
+    <div class="zones">
+      <div class="zone" data-answer="yes">
+        <h2>YES</h2>
+        <p>Drop here</p>
+      </div>
+
+      <div class="zone" data-answer="no">
+        <h2>NO</h2>
+        <p>Drop here</p>
+      </div>
+    </div>
+
+    <p id="message">Waiting for you...</p>
+    <button id="reset">Try again</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
