@@ -2,91 +2,659 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Sorting Challenge</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sorting Challenge</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #f1f5f9;
+  color: #243247;
+}
+
+.game {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+h1 {
+  margin-bottom: 8px;
+  color: #23466b;
+}
+
+.instructions {
+  color: #536579;
+  line-height: 1.5;
+}
+
+.section-title {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+  color: #23466b;
+}
+
+.card-area {
+  background: white;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 22px;
+  min-height: 150px;
+}
+
+.card-tray {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  min-height: 80px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  padding: 10px 6px;
+  background: #e4efff;
+  border: 2px solid #9bb9e5;
+  border-radius: 9px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card.selected {
+  background: #fff0bd;
+  border: 3px solid #d69b00;
+}
+
+.card.dragging {
+  opacity: 0.45;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.drop-zone {
+  min-height: 190px;
+  padding: 14px;
+  background: white;
+  border: 3px dashed #a8b8c9;
+  border-radius: 12px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.drop-zone.over {
+  background: #edf5ff;
+  border-color: #3676bd;
+}
+
+.category-heading {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 7px;
+  background: #dceaf8;
+  color: #23466b;
+  font-size: 1.15rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.category-heading:hover {
+  background: #c8def4;
+}
+
+.zone-hint {
+  margin: 8px 0 12px;
+  color: #64748b;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.zone-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  min-height: 65px;
+}
+
+.zone-cards .card {
+  min-height: 48px;
+  font-size: 0.9rem;
+}
+
+.drop-zone.correct {
+  background: #d9f5df;
+  border: 3px solid #279447;
+}
+
+.drop-zone.incorrect {
+  background: #ffe0e0;
+  border: 3px solid #d33b3b;
+}
+
+.message {
+  min-height: 48px;
+  margin: 20px 0 12px;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: bold;
+}
+
+.controls {
+  text-align: center;
+}
+
+button.reset {
+  padding: 12px 24px;
+  background: #23466b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button.reset:hover {
+  background: #173653;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.55);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.visible {
+  display: flex;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 480px;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+}
+
+.modal-content h2 {
+  color: #23466b;
+}
+
+.modal-content p {
+  line-height: 1.6;
+}
+
+.modal-content button {
+  margin-top: 12px;
+  padding: 10px 24px;
+  background: #23466b;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+@media (max-width: 650px) {
+  body {
+    padding: 12px;
+  }
+
+  .card-tray {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .categories {
+    grid-template-columns: 1fr;
+  }
+
+  .drop-zone {
+    min-height: 150px;
+  }
+}
+</style>
 </head>
+
 <body>
+<div class="game">
 
-  <main class="game">
-    <header class="game-header">
-      <h1>The Sorting Challenge!</h1>
-      <p>Can you sort all 20 cards into the correct categories?</p>
-      <p class="instructions">
-        Drag each card into its matching box.
-        You can also tap a card and then tap a category.
-      </p>
-    </header>
+  <header>
+    <h1>The Sorting Challenge</h1>
+    <p class="instructions">
+      Sort all 20 word cards into the correct categories.
+      You can drag a card, or tap a card and then tap a category.
+      Click a category heading to learn more about it.
+    </p>
+  </header>
 
-    <section class="card-area" aria-label="Cards to sort">
-      <h2>Words to sort</h2>
-      <div id="card-tray" class="card-tray">
-        <!-- Cards are created by JavaScript -->
-      </div>
-    </section>
+  <section class="card-area">
+    <h2 class="section-title">Words to sort</h2>
+    <div id="card-tray" class="card-tray"></div>
+  </section>
 
-    <section class="categories" aria-label="Sorting categories">
+  <section class="categories">
 
-      <div class="drop-zone" data-category="animal">
-        <button class="category-heading" type="button"
-                aria-label="Animal information">
-          🐨 ANIMAL <span>ⓘ</span>
-        </button>
-        <p class="zone-hint">Drop animals here</p>
-        <div class="zone-cards"></div>
-      </div>
-
-      <div class="drop-zone" data-category="fruit">
-        <button class="category-heading" type="button"
-                aria-label="Fruit information">
-          🍎 FRUIT <span>ⓘ</span>
-        </button>
-        <p class="zone-hint">Drop fruit here</p>
-        <div class="zone-cards"></div>
-      </div>
-
-      <div class="drop-zone" data-category="action">
-        <button class="category-heading" type="button"
-                aria-label="Action information">
-          🏃 ACTION <span>ⓘ</span>
-        </button>
-        <p class="zone-hint">Drop actions here</p>
-        <div class="zone-cards"></div>
-      </div>
-
-      <div class="drop-zone" data-category="name">
-        <button class="category-heading" type="button"
-                aria-label="Name information">
-          👧 NAME <span>ⓘ</span>
-        </button>
-        <p class="zone-hint">Drop names here</p>
-        <div class="zone-cards"></div>
-      </div>
-
-    </section>
-
-    <div id="message" class="message" role="status" aria-live="polite">
-      You have 20 cards to sort. Good luck!
+    <div class="drop-zone" data-category="animal">
+      <button class="category-heading" type="button">
+        🐾 Animal
+      </button>
+      <p class="zone-hint">Click the heading for information</p>
+      <div class="zone-cards"></div>
     </div>
 
-    <div class="game-controls">
-      <button id="reset" class="reset-button">Start again</button>
+    <div class="drop-zone" data-category="fruit">
+      <button class="category-heading" type="button">
+        🍎 Fruit
+      </button>
+      <p class="zone-hint">Click the heading for information</p>
+      <div class="zone-cards"></div>
     </div>
-  </main>
 
-  <!-- Information popup -->
-  <div id="info-modal" class="modal" hidden>
-    <div class="modal-content" role="dialog"
-         aria-modal="true" aria-labelledby="modal-title">
-      <button id="close-modal" class="close-modal"
-              aria-label="Close information">✕</button>
-      <h2 id="modal-title"></h2>
-      <p id="modal-text"></p>
-      <button id="modal-ok" class="modal-ok">Got it!</button>
+    <div class="drop-zone" data-category="action">
+      <button class="category-heading" type="button">
+        🏃 Action
+      </button>
+      <p class="zone-hint">Click the heading for information</p>
+      <div class="zone-cards"></div>
     </div>
+
+    <div class="drop-zone" data-category="name">
+      <button class="category-heading" type="button">
+        👤 Name
+      </button>
+      <p class="zone-hint">Click the heading for information</p>
+      <div class="zone-cards"></div>
+    </div>
+
+  </section>
+
+  <div id="message" class="message" aria-live="polite">
+    Choose a word to get started!
   </div>
 
-  <script src="script.js"></script>
+  <div class="controls">
+    <button id="reset" class="reset" type="button">
+      Start again
+    </button>
+  </div>
+
+</div>
+
+<div id="info-modal" class="modal" role="dialog"
+     aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-content">
+    <h2 id="modal-title"></h2>
+    <p id="modal-text"></p>
+    <button id="close-modal" type="button">Close</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+const cardData = [
+  { word: "Kangaroo", category: "animal" },
+  { word: "Dolphin", category: "animal" },
+  { word: "Elephant", category: "animal" },
+  { word: "Wombat", category: "animal" },
+  { word: "Kookaburra", category: "animal" },
+
+  { word: "Apple", category: "fruit" },
+  { word: "Banana", category: "fruit" },
+  { word: "Mango", category: "fruit" },
+  { word: "Orange", category: "fruit" },
+  { word: "Pear", category: "fruit" },
+
+  { word: "Running", category: "action" },
+  { word: "Jumping", category: "action" },
+  { word: "Swimming", category: "action" },
+  { word: "Singing", category: "action" },
+  { word: "Dancing", category: "action" },
+
+  { word: "Sarah", category: "name" },
+  { word: "Michael", category: "name" },
+  { word: "Olivia", category: "name" },
+  { word: "James", category: "name" },
+  { word: "Emily", category: "name" }
+];
+
+const categoryInfo = {
+  animal: {
+    title: "Animals",
+    text: "Animals are living things. They include mammals, birds, fish, reptiles and many other creatures. Kangaroos, dolphins and wombats are all animals."
+  },
+  fruit: {
+    title: "Fruit",
+    text: "Fruit usually develops from the flower of a plant and contains seeds. Many fruits are edible, such as apples, bananas, mangoes and pears."
+  },
+  action: {
+    title: "Actions",
+    text: "An action is something that someone or something does. Running, jumping, swimming, singing and dancing are all actions."
+  },
+  name: {
+    title: "Names",
+    text: "A name is a word used to identify a particular person. Sarah, Michael, Olivia, James and Emily are examples of people's names."
+  }
+};
+
+const tray = document.getElementById("card-tray");
+const zones = document.querySelectorAll(".drop-zone");
+const message = document.getElementById("message");
+const resetButton = document.getElementById("reset");
+
+const modal = document.getElementById("info-modal");
+const modalTitle = document.getElementById("modal-title");
+const modalText = document.getElementById("modal-text");
+const closeModalButton = document.getElementById("close-modal");
+
+let selectedCard = null;
+let draggedCard = null;
+let feedbackTimer = null;
+let gameFinished = false;
+
+function shuffle(items) {
+  const result = [...items];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+
+function createCard(item) {
+  const card = document.createElement("div");
+
+  card.className = "card";
+  card.textContent = item.word;
+  card.dataset.category = item.category;
+  card.draggable = true;
+  card.tabIndex = 0;
+  card.setAttribute("role", "button");
+  card.setAttribute("aria-label", item.word + ", movable word card");
+
+  card.addEventListener("click", function(event) {
+    event.stopPropagation();
+    selectCard(card);
+  });
+
+  card.addEventListener("keydown", function(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      selectCard(card);
+    }
+  });
+
+  card.addEventListener("dragstart", function(event) {
+    if (gameFinished) {
+      event.preventDefault();
+      return;
+    }
+
+    draggedCard = card;
+    card.classList.add("dragging");
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", card.textContent);
+  });
+
+  card.addEventListener("dragend", function() {
+    card.classList.remove("dragging");
+    draggedCard = null;
+
+    zones.forEach(zone => zone.classList.remove("over"));
+    tray.classList.remove("over");
+  });
+
+  return card;
+}
+
+function selectCard(card) {
+  if (gameFinished) return;
+
+  if (selectedCard === card) {
+    card.classList.remove("selected");
+    selectedCard = null;
+    message.textContent = "Choose a word to get started!";
+    return;
+  }
+
+  if (selectedCard) {
+    selectedCard.classList.remove("selected");
+  }
+
+  selectedCard = card;
+  card.classList.add("selected");
+  message.textContent =
+    "Selected: " + card.textContent +
+    ". Now tap a category.";
+}
+
+function clearFeedback() {
+  if (feedbackTimer) {
+    clearTimeout(feedbackTimer);
+    feedbackTimer = null;
+  }
+
+  zones.forEach(zone => {
+    zone.classList.remove("correct", "incorrect");
+  });
+}
+
+function moveCard(card, destination) {
+  if (!card || !destination || gameFinished) return;
+
+  clearFeedback();
+
+  card.classList.remove("selected");
+  destination.appendChild(card);
+
+  selectedCard = null;
+
+  const placedCards =
+    document.querySelectorAll(".zone-cards .card").length;
+
+  if (placedCards === cardData.length) {
+    checkAnswers();
+  } else {
+    message.textContent =
+      placedCards + " of 20 cards sorted. Keep going!";
+  }
+}
+
+function checkAnswers() {
+  let everythingCorrect = true;
+
+  zones.forEach(zone => {
+    const category = zone.dataset.category;
+    const cards = zone.querySelectorAll(".zone-cards .card");
+
+    const zoneCorrect =
+      cards.length > 0 &&
+      Array.from(cards).every(card =>
+        card.dataset.category === category
+      );
+
+    if (zoneCorrect) {
+      zone.classList.add("correct");
+    } else {
+      zone.classList.add("incorrect");
+      everythingCorrect = false;
+    }
+  });
+
+  if (everythingCorrect) {
+    celebrate();
+  } else {
+    message.textContent =
+      "Some cards are in the wrong place. Look at the colours and try again!";
+
+    feedbackTimer = setTimeout(function() {
+      clearFeedback();
+      message.textContent =
+        "Keep going! You can move any card to another category.";
+      feedbackTimer = null;
+    }, 2500);
+  }
+}
+
+function celebrate() {
+  gameFinished = true;
+
+  message.textContent =
+    "🎉 Fantastic work! All 20 words are in the correct categories! 🎉";
+}
+
+function showInfo(category) {
+  const info = categoryInfo[category];
+
+  if (!info) return;
+
+  modalTitle.textContent = info.title;
+  modalText.textContent = info.text;
+  modal.classList.add("visible");
+}
+
+function hideInfo() {
+  modal.classList.remove("visible");
+}
+
+function startGame() {
+  clearFeedback();
+
+  tray.innerHTML = "";
+
+  zones.forEach(zone => {
+    zone.querySelector(".zone-cards").innerHTML = "";
+  });
+
+  selectedCard = null;
+  draggedCard = null;
+  gameFinished = false;
+
+  const shuffledCards = shuffle(cardData);
+
+  shuffledCards.forEach(item => {
+    tray.appendChild(createCard(item));
+  });
+
+  message.textContent = "Choose a word to get started!";
+}
+
+// Tap a category to place the selected card.
+zones.forEach(zone => {
+  const heading = zone.querySelector(".category-heading");
+
+  heading.addEventListener("click", function(event) {
+    event.stopPropagation();
+    showInfo(zone.dataset.category);
+  });
+
+  zone.addEventListener("click", function(event) {
+    if (event.target.closest(".category-heading")) return;
+
+    if (selectedCard) {
+      moveCard(selectedCard, zone.querySelector(".zone-cards"));
+    }
+  });
+
+  zone.addEventListener("dragover", function(event) {
+    event.preventDefault();
+    if (draggedCard && !gameFinished) {
+      zone.classList.add("over");
+    }
+  });
+
+  zone.addEventListener("dragleave", function(event) {
+    if (!zone.contains(event.relatedTarget)) {
+      zone.classList.remove("over");
+    }
+  });
+
+  zone.addEventListener("drop", function(event) {
+    event.preventDefault();
+    zone.classList.remove("over");
+
+    if (draggedCard) {
+      moveCard(draggedCard, zone.querySelector(".zone-cards"));
+    }
+  });
+});
+
+// Allow cards to be returned to the Words to sort area.
+tray.addEventListener("click", function() {
+  if (selectedCard) {
+    moveCard(selectedCard, tray);
+    message.textContent = "Card returned. Choose another word or category.";
+  }
+});
+
+tray.addEventListener("dragover", function(event) {
+  event.preventDefault();
+  if (draggedCard && !gameFinished) {
+    tray.classList.add("over");
+  }
+});
+
+tray.addEventListener("dragleave", function(event) {
+  if (!tray.contains(event.relatedTarget)) {
+    tray.classList.remove("over");
+  }
+});
+
+tray.addEventListener("drop", function(event) {
+  event.preventDefault();
+  tray.classList.remove("over");
+
+  if (draggedCard) {
+    moveCard(draggedCard, tray);
+    message.textContent = "Card returned. Keep sorting!";
+  }
+});
+
+resetButton.addEventListener("click", startGame);
+closeModalButton.addEventListener("click", hideInfo);
+
+modal.addEventListener("click", function(event) {
+  if (event.target === modal) {
+    hideInfo();
+  }
+});
+
+// Start the game.
+startGame();
+</script>
+
 </body>
 </html>
