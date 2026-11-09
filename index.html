@@ -4,183 +4,365 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Sorting Challenge</title>
+<title>Think Before You Click!</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
+:root {
+  --navy: #25345e;
+  --purple: #6844bd;
+  --pink: #ffe4ec;
+  --green: #e0f8e5;
+  --yellow: #fff1ce;
+  --blue: #e0efff;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background: #f1f5f9;
-  color: #243247;
+  padding: 22px;
+  font-family: "Nunito", Arial, sans-serif;
+  color: var(--navy);
+  background:
+    radial-gradient(circle at 10% 10%, #ffffff 0 2px, transparent 3px),
+    linear-gradient(135deg, #e9f5ff, #f5edff 55%, #e8f8ff);
+  background-size: 30px 30px, auto;
 }
 
 .game {
-  max-width: 1100px;
+  max-width: 1250px;
   margin: 0 auto;
 }
 
 header {
+  position: relative;
+  padding: 18px 20px 24px;
+  margin-bottom: 20px;
+  border-radius: 25px;
+  background: linear-gradient(120deg, #bce8ff, #e8d8ff, #fff0bd);
+  border: 3px solid white;
   text-align: center;
-  margin-bottom: 22px;
+  box-shadow: 0 5px 0 #c5c6ed;
+  overflow: hidden;
 }
 
-h1 {
-  margin-bottom: 8px;
-  color: #23466b;
+header h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: #5431a3;
+  font-family: "Fredoka", "Nunito", sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  text-shadow: 2px 3px 0 white;
+}
+
+.subtitle {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  margin: 8px 0 12px;
+  padding: 6px 20px;
+  border-radius: 30px;
+  background: #7049bd;
+  color: white;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.25rem;
 }
 
 .instructions {
-  color: #536579;
+  position: relative;
+  z-index: 1;
+  max-width: 850px;
+  margin: 4px auto 0;
+  padding: 12px 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.88);
+  font-weight: 800;
   line-height: 1.5;
 }
 
-.section-title {
-  margin: 0 0 12px;
-  font-size: 1.2rem;
-  color: #23466b;
+.header-decoration {
+  position: absolute;
+  font-size: 4.5rem;
+  opacity: .9;
+}
+
+.header-left {
+  left: 18px;
+  bottom: 5px;
+  transform: rotate(-12deg);
+}
+
+.header-right {
+  right: 18px;
+  bottom: 5px;
+  transform: rotate(12deg);
 }
 
 .card-area {
-  background: white;
-  border: 2px solid #cbd5e1;
-  border-radius: 12px;
   padding: 18px;
   margin-bottom: 22px;
-  min-height: 150px;
+  background: rgba(255,255,255,.9);
+  border: 3px solid #9ec8f0;
+  border-radius: 22px;
+  box-shadow: 0 5px 0 #c5d9f0;
+}
+
+.section-title {
+  display: inline-block;
+  margin: 0 0 15px;
+  padding: 7px 18px;
+  border-radius: 20px;
+  background: #ffdf75;
+  color: #44316e;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.35rem;
 }
 
 .card-tray {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
-  min-height: 80px;
+  min-height: 75px;
 }
 
 .card {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 58px;
-  padding: 10px 6px;
-  background: #e4efff;
-  border: 2px solid #9bb9e5;
-  border-radius: 9px;
-  font-size: 1rem;
-  font-weight: bold;
+  min-height: 76px;
+  padding: 10px;
+  border: 2px solid #83b4e5;
+  border-radius: 13px;
+  background: linear-gradient(145deg, white, #eaf4ff);
+  box-shadow: 0 3px 0 #c0d7ef;
+  color: #27365d;
+  font-size: .92rem;
+  font-weight: 900;
+  line-height: 1.3;
   text-align: center;
   cursor: grab;
   user-select: none;
   touch-action: manipulation;
+  transition: transform .15s, box-shadow .15s;
 }
 
-.card:active {
-  cursor: grabbing;
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 0 #b2cce9;
 }
 
 .card.selected {
-  background: #fff0bd;
-  border: 3px solid #d69b00;
+  background: #fff2bd;
+  border: 3px solid #e2a900;
+  box-shadow: 0 0 0 4px #ffe9a2;
+  transform: translateY(-3px);
 }
 
 .card.dragging {
-  opacity: 0.45;
+  opacity: .4;
 }
 
 .categories {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 .drop-zone {
-  min-height: 190px;
-  padding: 14px;
-  background: white;
-  border: 3px dashed #a8b8c9;
-  border-radius: 12px;
-  transition: background 0.2s, border-color 0.2s;
+  position: relative;
+  min-height: 285px;
+  padding: 15px;
+  border: 3px solid;
+  border-radius: 22px;
+  overflow: hidden;
+  transition: background .2s, border-color .2s;
+}
+
+.zone-animal,
+.zone-cyber {
+  background: linear-gradient(145deg, #fff0f4, #ffdce7);
+  border-color: #ef91ac;
+}
+
+.zone-kind {
+  background: linear-gradient(145deg, #eaffed, #d4f5d9);
+  border-color: #78c78a;
+}
+
+.zone-unkind {
+  background: linear-gradient(145deg, #fff7df, #ffe8b6);
+  border-color: #e6b64f;
+}
+
+.zone-safe {
+  background: linear-gradient(145deg, #e8f3ff, #cfe5ff);
+  border-color: #80b7ee;
 }
 
 .drop-zone.over {
-  background: #edf5ff;
-  border-color: #3676bd;
+  filter: brightness(.96);
+  border-style: solid;
+  transform: scale(1.01);
 }
 
 .category-heading {
-  display: block;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 7px;
-  background: #dceaf8;
-  color: #23466b;
-  font-size: 1.15rem;
-  font-weight: bold;
+  min-height: 55px;
+  padding: 9px;
+  border: 0;
+  border-radius: 13px;
+  color: white;
+  font-family: "Fredoka", sans-serif;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
   cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,.12);
+}
+
+.zone-cyber .category-heading {
+  background: #d94770;
+}
+
+.zone-kind .category-heading {
+  background: #23934c;
+}
+
+.zone-unkind .category-heading {
+  background: #d78a16;
+}
+
+.zone-safe .category-heading {
+  background: #327bc0;
 }
 
 .category-heading:hover {
-  background: #c8def4;
+  filter: brightness(1.08);
 }
 
-.zone-hint {
-  margin: 8px 0 12px;
-  color: #64748b;
-  font-size: 0.85rem;
+.category-heading:focus-visible,
+.card:focus-visible {
+  outline: 4px solid #5431a3;
+  outline-offset: 3px;
+}
+
+.artwork {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 105px;
+  margin: 8px 0;
+  gap: 12px;
+}
+
+.art-sticker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  border: 3px solid rgba(255,255,255,.9);
+  border-radius: 30px;
+  background: rgba(255,255,255,.55);
+  box-shadow: 0 4px 0 rgba(0,0,0,.08);
+  font-size: 3.6rem;
+  transform: rotate(-4deg);
+}
+
+.art-sticker.second {
+  transform: rotate(5deg);
+  font-size: 3rem;
+}
+
+.art-description {
+  max-width: 250px;
+  font-size: .91rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.info-hint {
+  margin: 3px 0 8px;
+  font-size: .75rem;
+  font-weight: 800;
   text-align: center;
+  opacity: .7;
 }
 
 .zone-cards {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
-  min-height: 65px;
+  min-height: 85px;
+  padding: 9px;
+  border: 2px dashed rgba(50,60,100,.3);
+  border-radius: 14px;
+  background: rgba(255,255,255,.4);
 }
 
 .zone-cards .card {
-  min-height: 48px;
-  font-size: 0.9rem;
+  min-height: 58px;
+  font-size: .85rem;
 }
 
 .drop-zone.correct {
-  background: #d9f5df;
-  border: 3px solid #279447;
+  border: 4px solid #229b4c;
+  background: #d9f9df;
 }
 
 .drop-zone.incorrect {
-  background: #ffe0e0;
-  border: 3px solid #d33b3b;
+  border: 4px solid #d33c50;
+  background: #ffe0e3;
 }
 
 .message {
-  min-height: 48px;
+  min-height: 60px;
   margin: 20px 0 12px;
-  text-align: center;
+  padding: 14px;
+  border: 2px solid white;
+  border-radius: 18px;
+  background: linear-gradient(100deg, #e6ddff, #dceaff);
+  color: #49347f;
   font-size: 1.15rem;
-  font-weight: bold;
+  font-weight: 900;
+  text-align: center;
+  box-shadow: 0 3px 0 #c8c4e8;
 }
 
 .controls {
   text-align: center;
 }
 
-button.reset {
-  padding: 12px 24px;
-  background: #23466b;
+.reset {
+  padding: 13px 30px;
+  border: 0;
+  border-radius: 30px;
+  background: #6740ae;
   color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.2rem;
   cursor: pointer;
+  box-shadow: 0 4px 0 #43277d;
 }
 
-button.reset:hover {
-  background: #173653;
+.reset:hover {
+  background: #8059c8;
+  transform: translateY(-2px);
 }
 
 .modal {
@@ -188,10 +370,10 @@ button.reset:hover {
   position: fixed;
   inset: 0;
   z-index: 10;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.55);
   align-items: center;
   justify-content: center;
+  padding: 20px;
+  background: rgba(25,30,60,.65);
 }
 
 .modal.visible {
@@ -200,47 +382,78 @@ button.reset:hover {
 
 .modal-content {
   width: 100%;
-  max-width: 480px;
-  padding: 25px;
-  background: white;
-  border-radius: 12px;
+  max-width: 540px;
+  padding: 28px;
+  border: 5px solid white;
+  border-radius: 25px;
+  background: linear-gradient(145deg, white, #edf2ff);
   text-align: center;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
 }
 
 .modal-content h2 {
-  color: #23466b;
+  margin-top: 0;
+  color: #6040a7;
+  font-family: "Fredoka", sans-serif;
+  font-size: 2rem;
 }
 
 .modal-content p {
+  font-size: 1.08rem;
+  font-weight: 700;
   line-height: 1.6;
 }
 
 .modal-content button {
-  margin-top: 12px;
-  padding: 10px 24px;
-  background: #23466b;
+  padding: 11px 28px;
+  border: 0;
+  border-radius: 25px;
+  background: #6740ae;
   color: white;
-  border: none;
-  border-radius: 7px;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.1rem;
   cursor: pointer;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 800px) {
   body {
     padding: 12px;
   }
 
   .card-tray {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .categories {
     grid-template-columns: 1fr;
   }
 
-  .drop-zone {
-    min-height: 150px;
+  .header-decoration {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-tray {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card {
+    font-size: .85rem;
+  }
+
+  .art-sticker {
+    width: 75px;
+    height: 75px;
+    font-size: 2.8rem;
+  }
+
+  .art-description {
+    font-size: .82rem;
+  }
+
+  .zone-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 </style>
@@ -249,65 +462,97 @@ button.reset:hover {
 <body>
 <div class="game">
 
-  <header>
-    <h1>The Sorting Challenge</h1>
-    <p class="instructions">
-      Sort all 20 word cards into the correct categories.
-      You can drag a card, or tap a card and then tap a category.
-      Click a category heading to learn more about it.
-    </p>
-  </header>
+<header>
+  <div class="header-decoration header-left">💻</div>
+  <div class="header-decoration header-right">📱</div>
+  <h1>Think Before You Click!</h1>
+  <div class="subtitle">An Online Behaviour Challenge</div>
+  <p class="instructions">
+    Sort all 20 examples of online behaviour into the correct categories.
+    You can drag a card, or tap a card and then tap a category.
+    Click a category heading to learn more about it.
+  </p>
+</header>
 
-  <section class="card-area">
-    <h2 class="section-title">Words to sort</h2>
-    <div id="card-tray" class="card-tray"></div>
-  </section>
+<section class="card-area">
+  <h2 class="section-title">🖐 Examples to sort (20 cards)</h2>
+  <div id="card-tray" class="card-tray"></div>
+</section>
 
-  <section class="categories">
+<section class="categories">
 
-    <div class="drop-zone" data-category="animal">
-      <button class="category-heading" type="button">
-        🐾 Animal
-      </button>
-      <p class="zone-hint">Click the heading for information</p>
-      <div class="zone-cards"></div>
-    </div>
-
-    <div class="drop-zone" data-category="fruit">
-      <button class="category-heading" type="button">
-        🍎 Fruit
-      </button>
-      <p class="zone-hint">Click the heading for information</p>
-      <div class="zone-cards"></div>
-    </div>
-
-    <div class="drop-zone" data-category="action">
-      <button class="category-heading" type="button">
-        🏃 Action
-      </button>
-      <p class="zone-hint">Click the heading for information</p>
-      <div class="zone-cards"></div>
-    </div>
-
-    <div class="drop-zone" data-category="name">
-      <button class="category-heading" type="button">
-        👤 Name
-      </button>
-      <p class="zone-hint">Click the heading for information</p>
-      <div class="zone-cards"></div>
-    </div>
-
-  </section>
-
-  <div id="message" class="message" aria-live="polite">
-    Choose a word to get started!
-  </div>
-
-  <div class="controls">
-    <button id="reset" class="reset" type="button">
-      Start again
+  <div class="drop-zone zone-cyber" data-category="cyber">
+    <button class="category-heading" type="button">
+      📱 Cyberbullying
     </button>
+    <div class="artwork">
+      <div class="art-sticker">📱</div>
+      <div class="art-sticker second">😟</div>
+      <div class="art-description">
+        Repeated behaviour using digital technology to hurt, embarrass,
+        threaten or exclude someone.
+      </div>
+    </div>
+    <p class="info-hint">ⓘ Click the heading to learn more</p>
+    <div class="zone-cards"></div>
   </div>
+
+  <div class="drop-zone zone-kind" data-category="kind">
+    <button class="category-heading" type="button">
+      💚 Kind online behaviour
+    </button>
+    <div class="artwork">
+      <div class="art-sticker">💬</div>
+      <div class="art-sticker second">❤️</div>
+      <div class="art-description">
+        Using technology to be friendly, supportive, encouraging and respectful.
+      </div>
+    </div>
+    <p class="info-hint">ⓘ Click the heading to learn more</p>
+    <div class="zone-cards"></div>
+  </div>
+
+  <div class="drop-zone zone-unkind" data-category="unkind">
+    <button class="category-heading" type="button">
+      ⚠️ Unkind online behaviour
+    </button>
+    <div class="artwork">
+      <div class="art-sticker">📱</div>
+      <div class="art-sticker second">👎</div>
+      <div class="art-description">
+        A hurtful or disrespectful online action. It may happen once rather
+        than being repeated, but it is still not okay.
+      </div>
+    </div>
+    <p class="info-hint">ⓘ Click the heading to learn more</p>
+    <div class="zone-cards"></div>
+  </div>
+
+  <div class="drop-zone zone-safe" data-category="safe">
+    <button class="category-heading" type="button">
+      🛡️ Safe online choices
+    </button>
+    <div class="artwork">
+      <div class="art-sticker">🛡️</div>
+      <div class="art-sticker second">🔒</div>
+      <div class="art-description">
+        Actions that protect ourselves or others, including asking for help,
+        reporting behaviour and protecting personal information.
+      </div>
+    </div>
+    <p class="info-hint">ⓘ Click the heading to learn more</p>
+    <div class="zone-cards"></div>
+  </div>
+
+</section>
+
+<div id="message" class="message" aria-live="polite">
+  Choose an example to get started!
+</div>
+
+<div class="controls">
+  <button id="reset" class="reset" type="button">↻ Start again</button>
+</div>
 
 </div>
 
@@ -316,7 +561,7 @@ button.reset:hover {
   <div class="modal-content">
     <h2 id="modal-title"></h2>
     <p id="modal-text"></p>
-    <button id="close-modal" type="button">Close</button>
+    <button id="close-modal" type="button">Got it!</button>
   </div>
 </div>
 
@@ -324,47 +569,51 @@ button.reset:hover {
 "use strict";
 
 const cardData = [
-  { word: "Kangaroo", category: "animal" },
-  { word: "Dolphin", category: "animal" },
-  { word: "Elephant", category: "animal" },
-  { word: "Wombat", category: "animal" },
-  { word: "Kookaburra", category: "animal" },
+  // Cyberbullying
+  { word: "Someone keeps sending nasty messages to the same student.", category: "cyber" },
+  { word: "A group repeatedly makes fun of a student in an online game.", category: "cyber" },
+  { word: "Someone keeps posting embarrassing pictures of another student to upset them.", category: "cyber" },
+  { word: "A student is repeatedly left out of an online group chat on purpose.", category: "cyber" },
+  { word: "Someone keeps sending threatening messages to another student.", category: "cyber" },
 
-  { word: "Apple", category: "fruit" },
-  { word: "Banana", category: "fruit" },
-  { word: "Mango", category: "fruit" },
-  { word: "Orange", category: "fruit" },
-  { word: "Pear", category: "fruit" },
+  // Kind online behaviour
+  { word: "You send a friendly message to a classmate who is feeling sad.", category: "kind" },
+  { word: "You congratulate someone when they do well in a game.", category: "kind" },
+  { word: "You invite a classmate to join your online game.", category: "kind" },
+  { word: "You encourage a friend who is having difficulty with something.", category: "kind" },
+  { word: "You ask permission before sharing a photo of your friend.", category: "kind" },
 
-  { word: "Running", category: "action" },
-  { word: "Jumping", category: "action" },
-  { word: "Swimming", category: "action" },
-  { word: "Singing", category: "action" },
-  { word: "Dancing", category: "action" },
+  // Unkind online behaviour
+  { word: "Someone sends a rude message to a classmate.", category: "unkind" },
+  { word: "You laugh at someone's mistake in an online game chat.", category: "unkind" },
+  { word: "Someone posts an embarrassing picture of a friend without asking.", category: "unkind" },
+  { word: "You write a mean comment about someone's drawing.", category: "unkind" },
+  { word: "Someone makes a hurtful joke about another student's appearance.", category: "unkind" },
 
-  { word: "Sarah", category: "name" },
-  { word: "Michael", category: "name" },
-  { word: "Olivia", category: "name" },
-  { word: "James", category: "name" },
-  { word: "Emily", category: "name" }
+  // Safe online choices
+  { word: "You tell a trusted adult when someone sends you a nasty message.", category: "safe" },
+  { word: "You block someone who keeps sending unwanted messages.", category: "safe" },
+  { word: "You report a hurtful post to the website or game.", category: "safe" },
+  { word: "You keep your password private.", category: "safe" },
+  { word: "You save a screenshot of a hurtful message to show a trusted adult.", category: "safe" }
 ];
 
 const categoryInfo = {
-  animal: {
-    title: "Animals",
-    text: "Animals are living things. They include mammals, birds, fish, reptiles and many other creatures. Kangaroos, dolphins and wombats are all animals."
+  cyber: {
+    title: "Cyberbullying",
+    text: "Cyberbullying happens when someone uses the internet, a phone or a game to repeatedly hurt, threaten or embarrass another person. It can happen through messages, pictures, videos or online games. If this happens to you or someone you know, tell a trusted adult."
   },
-  fruit: {
-    title: "Fruit",
-    text: "Fruit usually develops from the flower of a plant and contains seeds. Many fruits are edible, such as apples, bananas, mangoes and pears."
+  kind: {
+    title: "Kind online behaviour",
+    text: "We can use the internet to make people feel happy, included and supported. Think before you send a message or share something. Ask yourself: Would I say this to someone's face? Would it make them feel good?"
   },
-  action: {
-    title: "Actions",
-    text: "An action is something that someone or something does. Running, jumping, swimming, singing and dancing are all actions."
+  unkind: {
+    title: "Unkind online behaviour",
+    text: "Sometimes people say or do hurtful things online. Even if it only happens once, it can upset someone. It is important to think about how our words and actions affect other people. We should treat people with respect, both online and offline."
   },
-  name: {
-    title: "Names",
-    text: "A name is a word used to identify a particular person. Sarah, Michael, Olivia, James and Emily are examples of people's names."
+  safe: {
+    title: "Safe online choices",
+    text: "We can help keep ourselves and others safe online. Don't share private information or passwords. If someone makes you feel uncomfortable or sends something hurtful, don't respond with hurtful messages. Save evidence, block or report the person if appropriate, and talk to a trusted adult."
   }
 };
 
@@ -403,7 +652,7 @@ function createCard(item) {
   card.draggable = true;
   card.tabIndex = 0;
   card.setAttribute("role", "button");
-  card.setAttribute("aria-label", item.word + ", movable word card");
+  card.setAttribute("aria-label", item.word + ", movable example card");
 
   card.addEventListener("click", function(event) {
     event.stopPropagation();
@@ -432,7 +681,6 @@ function createCard(item) {
   card.addEventListener("dragend", function() {
     card.classList.remove("dragging");
     draggedCard = null;
-
     zones.forEach(zone => zone.classList.remove("over"));
     tray.classList.remove("over");
   });
@@ -446,7 +694,7 @@ function selectCard(card) {
   if (selectedCard === card) {
     card.classList.remove("selected");
     selectedCard = null;
-    message.textContent = "Choose a word to get started!";
+    message.textContent = "Choose an example to get started!";
     return;
   }
 
@@ -456,9 +704,9 @@ function selectCard(card) {
 
   selectedCard = card;
   card.classList.add("selected");
+
   message.textContent =
-    "Selected: " + card.textContent +
-    ". Now tap a category.";
+    "Selected! Now tap the category where you think it belongs.";
 }
 
 function clearFeedback() {
@@ -479,7 +727,6 @@ function moveCard(card, destination) {
 
   card.classList.remove("selected");
   destination.appendChild(card);
-
   selectedCard = null;
 
   const placedCards =
@@ -489,7 +736,7 @@ function moveCard(card, destination) {
     checkAnswers();
   } else {
     message.textContent =
-      placedCards + " of 20 cards sorted. Keep going!";
+      placedCards + " of 20 examples sorted. Keep going!";
   }
 }
 
@@ -518,12 +765,12 @@ function checkAnswers() {
     celebrate();
   } else {
     message.textContent =
-      "Some cards are in the wrong place. Look at the colours and try again!";
+      "Not quite! Some examples are in the wrong place. Have another look and try again!";
 
     feedbackTimer = setTimeout(function() {
       clearFeedback();
       message.textContent =
-        "Keep going! You can move any card to another category.";
+        "Keep going! You can move any example to another category.";
       feedbackTimer = null;
     }, 2500);
   }
@@ -531,14 +778,12 @@ function checkAnswers() {
 
 function celebrate() {
   gameFinished = true;
-
   message.textContent =
-    "🎉 Fantastic work! All 20 words are in the correct categories! 🎉";
+    "🎉 Fantastic work! All 20 examples are in the correct categories! 🎉";
 }
 
 function showInfo(category) {
   const info = categoryInfo[category];
-
   if (!info) return;
 
   modalTitle.textContent = info.title;
@@ -563,16 +808,15 @@ function startGame() {
   draggedCard = null;
   gameFinished = false;
 
-  const shuffledCards = shuffle(cardData);
-
-  shuffledCards.forEach(item => {
+  shuffle(cardData).forEach(item => {
     tray.appendChild(createCard(item));
   });
 
-  message.textContent = "Choose a word to get started!";
+  message.textContent = "Choose an example to get started!";
 }
 
-// Tap a category to place the selected card.
+// Category headings show information.
+// Clicking the rest of a category places a selected card.
 zones.forEach(zone => {
   const heading = zone.querySelector(".category-heading");
 
@@ -591,6 +835,7 @@ zones.forEach(zone => {
 
   zone.addEventListener("dragover", function(event) {
     event.preventDefault();
+
     if (draggedCard && !gameFinished) {
       zone.classList.add("over");
     }
@@ -612,16 +857,17 @@ zones.forEach(zone => {
   });
 });
 
-// Allow cards to be returned to the Words to sort area.
+// Return a selected card to the tray by tapping the tray.
 tray.addEventListener("click", function() {
   if (selectedCard) {
     moveCard(selectedCard, tray);
-    message.textContent = "Card returned. Choose another word or category.";
+    message.textContent = "Example returned. Keep sorting!";
   }
 });
 
 tray.addEventListener("dragover", function(event) {
   event.preventDefault();
+
   if (draggedCard && !gameFinished) {
     tray.classList.add("over");
   }
@@ -639,12 +885,16 @@ tray.addEventListener("drop", function(event) {
 
   if (draggedCard) {
     moveCard(draggedCard, tray);
-    message.textContent = "Card returned. Keep sorting!";
+    message.textContent = "Example returned. Keep sorting!";
   }
 });
 
 resetButton.addEventListener("click", startGame);
-closeModalButton.addEventListener("click", hideInfo);
+closeModalButton.addEventListener("click", hideModal);
+
+function hideModal() {
+  hideInfo();
+}
 
 modal.addEventListener("click", function(event) {
   if (event.target === modal) {
@@ -652,7 +902,6 @@ modal.addEventListener("click", function(event) {
   }
 });
 
-// Start the game.
 startGame();
 </script>
 
