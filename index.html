@@ -4,35 +4,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello Game</title>
+  <title>The Sorting Challenge</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="game">
-    <h1>Hello, Game!</h1>
-    <p>Drag the card into either box.</p>
+  <main class="game">
+    <header class="game-header">
+      <h1>The Sorting Challenge!</h1>
+      <p>Can you sort all 20 cards into the correct categories?</p>
+      <p class="instructions">
+        Drag each card into its matching box.
+        You can also tap a card and then tap a category.
+      </p>
+    </header>
 
-    <div id="card-home">
-      <div class="card" id="card" draggable="true">
-        👋 Hello! Drag me!
+    <section class="card-area" aria-label="Cards to sort">
+      <h2>Words to sort</h2>
+      <div id="card-tray" class="card-tray">
+        <!-- Cards are created by JavaScript -->
       </div>
+    </section>
+
+    <section class="categories" aria-label="Sorting categories">
+
+      <div class="drop-zone" data-category="animal">
+        <button class="category-heading" type="button"
+                aria-label="Animal information">
+          🐨 ANIMAL <span>ⓘ</span>
+        </button>
+        <p class="zone-hint">Drop animals here</p>
+        <div class="zone-cards"></div>
+      </div>
+
+      <div class="drop-zone" data-category="fruit">
+        <button class="category-heading" type="button"
+                aria-label="Fruit information">
+          🍎 FRUIT <span>ⓘ</span>
+        </button>
+        <p class="zone-hint">Drop fruit here</p>
+        <div class="zone-cards"></div>
+      </div>
+
+      <div class="drop-zone" data-category="action">
+        <button class="category-heading" type="button"
+                aria-label="Action information">
+          🏃 ACTION <span>ⓘ</span>
+        </button>
+        <p class="zone-hint">Drop actions here</p>
+        <div class="zone-cards"></div>
+      </div>
+
+      <div class="drop-zone" data-category="name">
+        <button class="category-heading" type="button"
+                aria-label="Name information">
+          👧 NAME <span>ⓘ</span>
+        </button>
+        <p class="zone-hint">Drop names here</p>
+        <div class="zone-cards"></div>
+      </div>
+
+    </section>
+
+    <div id="message" class="message" role="status" aria-live="polite">
+      You have 20 cards to sort. Good luck!
     </div>
 
-    <div class="zones">
-      <div class="zone" data-answer="yes">
-        <h2>YES</h2>
-        <p>Drop here</p>
-      </div>
-
-      <div class="zone" data-answer="no">
-        <h2>NO</h2>
-        <p>Drop here</p>
-      </div>
+    <div class="game-controls">
+      <button id="reset" class="reset-button">Start again</button>
     </div>
+  </main>
 
-    <p id="message">Waiting for you...</p>
-    <button id="reset">Try again</button>
+  <!-- Information popup -->
+  <div id="info-modal" class="modal" hidden>
+    <div class="modal-content" role="dialog"
+         aria-modal="true" aria-labelledby="modal-title">
+      <button id="close-modal" class="close-modal"
+              aria-label="Close information">✕</button>
+      <h2 id="modal-title"></h2>
+      <p id="modal-text"></p>
+      <button id="modal-ok" class="modal-ok">Got it!</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
