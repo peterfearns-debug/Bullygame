@@ -26,7 +26,7 @@
 
 body {
   margin: 0;
-  padding: 22px;
+  padding: 12px;
   font-family: "Nunito", Arial, sans-serif;
   color: var(--navy);
   background:
@@ -36,7 +36,8 @@ body {
 }
 
 .game {
-  max-width: 1250px;
+  width: 100%;
+  max-width: 1700px;
   margin: 0 auto;
 }
 
@@ -456,6 +457,106 @@ header h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* COMPACT FOUR-CATEGORY LAYOUT */
+
+.categories {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.drop-zone {
+  min-height: 220px;
+  padding: 10px;
+  border-radius: 18px;
+}
+
+.category-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  min-height: 65px;
+  padding: 7px 9px;
+}
+
+.heading-art {
+  flex-shrink: 0;
+  font-size: clamp(1.5rem, 2.2vw, 2.3rem);
+}
+
+.heading-label {
+  flex: 1;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.info-button {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 19px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.info-button:hover {
+  background: rgba(255,255,255,.4);
+}
+
+.artwork {
+  display: none;
+}
+
+.info-hint {
+  display: none;
+}
+
+.zone-description {
+  min-height: 48px;
+  margin: 9px 3px;
+  font-size: .9rem;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.zone-cards {
+  min-height: 65px;
+  padding: 7px;
+}
+
+.zone-cards .card {
+  min-height: 55px;
+  font-size: .8rem;
+  padding: 7px;
+}
+
+@media (max-width: 1100px) {
+  .categories {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 8px;
+  }
+
+  .categories {
+    grid-template-columns: 1fr;
+  }
+
+  .card-tray {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 </style>
 </head>
 
@@ -479,68 +580,61 @@ header h1 {
   <div id="card-tray" class="card-tray"></div>
 </section>
 
+ 
 <section class="categories">
 
   <div class="drop-zone zone-cyber" data-category="cyber">
-    <button class="category-heading" type="button">
-      📱 Cyberbullying
-    </button>
-    <div class="artwork">
-      <div class="art-sticker">📱</div>
-      <div class="art-sticker second">😟</div>
-      <div class="art-description">
-        Repeated behaviour using digital technology to hurt, embarrass,
-        threaten or exclude someone.
-      </div>
+    <div class="category-heading">
+      <span class="heading-art">📱</span>
+      <span class="heading-label">Cyberbullying</span>
+      <button class="info-button" type="button" aria-label="Information about cyberbullying">i</button>
+      <span class="heading-art">🚫</span>
     </div>
-    <p class="info-hint">ⓘ Click the heading to learn more</p>
+    <p class="zone-description">
+      Repeated behaviour using digital technology to hurt, embarrass,
+      threaten or exclude someone.
+    </p>
     <div class="zone-cards"></div>
   </div>
 
   <div class="drop-zone zone-kind" data-category="kind">
-    <button class="category-heading" type="button">
-      💚 Kind online behaviour
-    </button>
-    <div class="artwork">
-      <div class="art-sticker">💬</div>
-      <div class="art-sticker second">❤️</div>
-      <div class="art-description">
-        Using technology to be friendly, supportive, encouraging and respectful.
-      </div>
+    <div class="category-heading">
+      <span class="heading-art">❤️</span>
+      <span class="heading-label">Kind online behaviour</span>
+      <button class="info-button" type="button" aria-label="Information about kind online behaviour">i</button>
+      <span class="heading-art">👍</span>
     </div>
-    <p class="info-hint">ⓘ Click the heading to learn more</p>
+    <p class="zone-description">
+      Using technology to be friendly, supportive, encouraging and respectful.
+    </p>
     <div class="zone-cards"></div>
   </div>
 
   <div class="drop-zone zone-unkind" data-category="unkind">
-    <button class="category-heading" type="button">
-      ⚠️ Unkind online behaviour
-    </button>
-    <div class="artwork">
-      <div class="art-sticker">📱</div>
-      <div class="art-sticker second">👎</div>
-      <div class="art-description">
-        A hurtful or disrespectful online action. It may happen once rather
-        than being repeated, but it is still not okay.
-      </div>
+    <div class="category-heading">
+      <span class="heading-art">😟</span>
+      <span class="heading-label">Unkind online behaviour</span>
+      <button class="info-button" type="button" aria-label="Information about unkind online behaviour">i</button>
+      <span class="heading-art">👎</span>
     </div>
-    <p class="info-hint">ⓘ Click the heading to learn more</p>
+    <p class="zone-description">
+      A hurtful or disrespectful online action. It may happen once rather
+      than being repeated, but it is still not okay.
+    </p>
     <div class="zone-cards"></div>
   </div>
 
   <div class="drop-zone zone-safe" data-category="safe">
-    <button class="category-heading" type="button">
-      🛡️ Safe online choices
-    </button>
-    <div class="artwork">
-      <div class="art-sticker">🛡️</div>
-      <div class="art-sticker second">🔒</div>
-      <div class="art-description">
-        Actions that protect ourselves or others, including asking for help,
-        reporting behaviour and protecting personal information.
-      </div>
+    <div class="category-heading">
+      <span class="heading-art">🛡️</span>
+      <span class="heading-label">Safe online choices</span>
+      <button class="info-button" type="button" aria-label="Information about safe online choices">i</button>
+      <span class="heading-art">🔒</span>
     </div>
-    <p class="info-hint">ⓘ Click the heading to learn more</p>
+    <p class="zone-description">
+      Actions that protect ourselves or others, including asking for help,
+      reporting behaviour and protecting personal information.
+    </p>
     <div class="zone-cards"></div>
   </div>
 
@@ -818,16 +912,15 @@ function startGame() {
 // Category headings show information.
 // Clicking the rest of a category places a selected card.
 zones.forEach(zone => {
-  const heading = zone.querySelector(".category-heading");
+  const infoButton = zone.querySelector(".info-button");
 
-  heading.addEventListener("click", function(event) {
+  infoButton.addEventListener("click", function(event) {
     event.stopPropagation();
     showInfo(zone.dataset.category);
   });
 
   zone.addEventListener("click", function(event) {
-    if (event.target.closest(".category-heading")) return;
-
+    if (event.target.closest(".info-button")) return;
     if (selectedCard) {
       moveCard(selectedCard, zone.querySelector(".zone-cards"));
     }
